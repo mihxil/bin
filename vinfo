@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+mplayer -vo null -ao null -identify -frames 0 $@

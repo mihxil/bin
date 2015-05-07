@@ -1,0 +1,2 @@
+#!/bin/bash
+CLASSPATH=~/.m2/repository/org/mmbase/mmbase-utils/2.0-SNAPSHOT/mmbase-utils-2.0-SNAPSHOT.jar:~/.m2/repository/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar java -Dfile.encoding=UTF-8 org.mmbase.util.Encode $@
