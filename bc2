@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+SOURCE=$(readlink  $BASH_SOURCE)
+if [[ -z "$SOURCE" ]] ; then
+    SOURCE=$BASH_SOURCE
+fi
+DIR=$(dirname ${SOURCE[0]})
+
+
+cat ${DIR}/extensions.bc ${DIR}/scientific_constants.bc - <<< "$1" | BC_LINE_LENGTH=1000000  bc -l
