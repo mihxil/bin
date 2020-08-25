@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # intellij sucks a bit and is prone leaving processes behind (especially when switching processes)
-ps aux | grep -- "-Dcatalina.base=/Users/michiel/Library/Caches/IntelliJIdea" | grep -v 'grep' | grep "$1" | \
+ps aux | grep -- "-Dcatalina.base=${HOME}/Library/Caches/JetBrains/IntelliJ" | grep -v 'grep' | grep "$1" | \
 while read line ; do
     i=`echo $line | cut -d' ' -f2`
     echo Killing

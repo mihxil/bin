@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+M2=$HOME/.m2/repository
+XALAN=$M2/xalan/xalan/2.7.1/xalan-2.7.1.jar
+SERIALIZER=$M2/xalan/serializer/2.7.1/serializer-2.7.1.jar
+CLASSPATH=$XALAN:$SERIALIZER java  org.apache.xalan.xslt.Process $@
+
+
+
