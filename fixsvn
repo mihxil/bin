@@ -1,0 +1,4 @@
+for i in `find . -type d -path "*/.svn" -prune` ; do
+    mkdir -p $i/tmp/text-base
+    mkdir -p $i/tmp/prop-base
+done

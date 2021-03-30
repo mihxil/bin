@@ -1,0 +1,5 @@
+proxy on
+echo proxy on
+ssh jump
+proxy off
+echo proxy off

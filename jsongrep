@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+DIR=$(dirname $0)
+#java -Xrunjdwp:transport=dt_socket,address=4001,server=y,suspend=n  -jar $DIR/mihxil-json-grep-0.9-SNAPSHOT-executable.jar "$@"
+java -jar $DIR/mihxil-json-grep-0.10-SNAPSHOT-executable.jar "$@"
