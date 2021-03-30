@@ -20,7 +20,10 @@ sub ts {
         } else {
             $time->set_time_zone("Europe/Amsterdam");
         }
-        print $time->strftime("%Y-%m-%dT%H:%M:%S %Z")."\n";
+        my  $result =  $time->strftime("%Y-%m-%dT%H:%M:%S");
+        $result .= sprintf ".%03d", ($arg-int($arg))*1000;
+        $result .=  $time->strftime("%Z");
+        print $result."\n";
     } else {
         print str2time($arg) * 1000;
         print "\n";
