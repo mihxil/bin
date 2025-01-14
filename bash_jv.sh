@@ -32,14 +32,14 @@ jv_apple() {
 
 jv_ubuntu() {
     if [ "$1" == "" ] ; then
-	java -version
+        java -version
     elif [ "$1" == "8" ] ; then
         v=$(update-java-alternatives -l | grep '1\.8' | cut -d " " -f1)
         sudo update-java-alternatives --set $v
         java -version
     else
-	v=$(update-java-alternatives -l | grep "$1" | cut -d " " -f1)
-	sudo update-java-alternatives --set $v
+        v=$(update-java-alternatives -l | grep "$1" | cut -d " " -f1)
+        sudo update-java-alternatives --set $v
         java -version
     fi
 }
@@ -48,8 +48,8 @@ jv_ubuntu() {
 
 jv() {
     if which update-java-alternatives ; then
-	jv_ubuntu $@
+        jv_ubuntu $@
     else
-	jv_apple $@
+        jv_apple $@
     fi
 }
