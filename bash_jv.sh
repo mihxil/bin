@@ -38,7 +38,7 @@ jv_ubuntu() {
         sudo update-java-alternatives --set $v
         java -version
     else
-        v=$(update-java-alternatives -l | grep "$1" | cut -d " " -f1)
+        v=$(update-java-alternatives -l | grep "java-1.$1" | cut -d " " -f1)
         sudo update-java-alternatives --set $v
         java -version
     fi
