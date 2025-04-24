@@ -39,6 +39,12 @@ jv_ubuntu() {
         java -version
     else
         v=$(update-java-alternatives -l | grep -E "java-1.$1|temurin-$1" | cut -d " " -f1)
+        if [ -z "$v" ] ; then
+            echo "No version $1 found. Try apt-get install temurin-$1-jdk"
+            echo "See https://marcolenzo.eu/install-java-temurin-jdks-instead-of-openjdk/"
+            jv
+            return
+        fi
         sudo update-java-alternatives --set $v
         java -version
     fi
