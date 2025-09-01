@@ -1,0 +1,18 @@
+
+
+alias mci='mvn clean install'
+alias mvn='mvn --threads 1C'
+alias mvn2='M2_HOME=/opt/local/share/java/maven2 mvn2'
+alias mvn8='MAVEN_OPTS=${MAVEN_OPTS_NODEBUG8}'
+alias mvnT='LC_CTYPE=UTF-8 mvn -DskipTests=false -DskipITs=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true"'
+alias mvn_clean_repo='mvn -Dmaven.repo.local=/home/michiel/.m2/repository_clean'
+alias mvnc='/usr/local/bin/mvn'
+alias mvnd='MAVEN_OPTS=${MAVEN_OPTS_DEBUG}'
+alias mvnd2='MAVEN_OPTS=${MAVEN_OPTS_DEBUG2}'
+alias mvnd8='MAVEN_OPTS=${MAVEN_OPTS_DEBUG8}'
+alias mvnff='mvn -DskipTests=false -Dsurefire.skipAfterFailureCount=1 --threads 1'
+alias mvnm='mvn -P\!npm,\!analyze'
+alias mvnnd='MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}'
+alias mvnp='mvn --threads 1'
+alias mvnsocks='MAVEN_OPTS=${MAVEN_OPTS_SOCKS}'
+alias mvnt='LC_CTYPE=UTF-8 mvn -DskipTests=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true"'
