@@ -79,11 +79,12 @@ trim() {
     var="${var%"${var##*[![:space:]]}"}"
 }
 
+
 oc_ps1() {
     config=~/.kube/config
     # collect both times in seconds-since-the-epoch
-    one_day_ago=$(gdate -d 'now - 1 days' +%s)
-    file_time=$(gdate -r "$config" +%s)
+    one_day_ago=$(date -d 'now - 1 days' +%s)
+    file_time=$(date -r "$config" +%s)
     if (( file_time > one_day_ago )) ; then
         # Get current context
         CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
@@ -152,7 +153,6 @@ git_log_npo_for_date() {
     done
 }
 
-alias date=gdate
 function ts() {
     input=$1
     re='^[0-9]+L?$'

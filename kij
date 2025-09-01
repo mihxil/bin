@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # intellij sucks a bit and is prone leaving processes behind (especially when switching processes)
-ps aux | grep -E -- "-Dcatalina.base=$HOME/.*/JetBrains/IntelliJIdea" | grep -v 'grep' | grep "$1" | \
+ps aux | grep -E -- "(-Dcatalina.base=.*/JetBrains/IntelliJIdea|-Dpreload.project.path|-Dspring.application.admin.enabled=true)" | grep -v 'grep' | grep "$1" | \
 while read line ; do
     i=`echo $line | cut -d' ' -f2`
     echo Killing
