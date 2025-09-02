@@ -1,5 +1,8 @@
+
+GDATE=/usr/bin/date
 if [ -z "$WSL_DISTRO_NAME" ] ; then
-  echo "apple?"
+  #echo "apple?"
+  GDATE=/usr/bin/gdate
   # apple
   function cl {
      cd $(dirname $(gfind $HOME/Library/Caches/JetBrains/*/tomcat/* -wholename '*/tomcat/*.log' -printf "%T@ %p\n" | sort -n | tail -1 | awk '{print $2}'))
@@ -17,6 +20,7 @@ else
      clw
   }
 fi
+
 
 
 function xless() {
@@ -80,11 +84,12 @@ trim() {
 }
 
 
+
 oc_ps1() {
     config=~/.kube/config
     # collect both times in seconds-since-the-epoch
-    one_day_ago=$(date -d 'now - 1 days' +%s)
-    file_time=$(date -r "$config" +%s)
+    one_day_ago=$($GDATE -d 'now - 1 days' +%s)
+    file_time=$($GDATE -r "$config" +%s)
     if (( file_time > one_day_ago )) ; then
         # Get current context
         CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
