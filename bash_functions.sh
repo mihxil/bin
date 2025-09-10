@@ -2,7 +2,7 @@
 GDATE=/usr/bin/date
 if [ -z "$WSL_DISTRO_NAME" ] ; then
   #echo "apple?"
-  GDATE=/usr/bin/gdate
+  GDATE=/opt/homebrew/bin/gdate
   # apple
   function cl {
      cd $(dirname $(gfind $HOME/Library/Caches/JetBrains/*/tomcat/* -wholename '*/tomcat/*.log' -printf "%T@ %p\n" | sort -n | tail -1 | awk '{print $2}'))
@@ -148,10 +148,10 @@ git_log_npo_for_date() {
     fi
     dirs=("npo" "github/npo-poms" "github/vpro/vpro-shared")
     while [[ "$start" != "$end" ]]; do
-
         current_end=$(date --date "$start + 1 day" -I)
         echo "$start - $current_end ${dirs[*]}"
         for dir in ${dirs[@]}; do
+            echo $dir
             (cd ~/$dir ; git_log_for_date $start $current_end )
 	done
         start=$current_end
