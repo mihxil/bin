@@ -1,30 +1,15 @@
 
 
 jv_apple() {
-    if [ "$1" == "7" ] ; then
-        export JAVA_HOME=`/usr/libexec/java_home -v 1.7.0_60`
-        java -version
-    elif [ "$1" == "oracle8" ] ; then
-        export JAVA_HOME=`/usr/libexec/java_home -v  1.8.0_211`
-        java -version
-
-    elif [ "$1" == "8" ] ; then
-        export JAVA_HOME=`/usr/libexec/java_home -v  1.8.0_232`
-        #export JAVA_HOME=`/usr/libexec/java_home -v  1.8.0_172`
-        java -version
-    elif [ "$1" == "open8" ] ; then
-        export JAVA_HOME=`/usr/libexec/java_home -v  1.8.0_232`
-        java -version
-    elif [ "$1" == "9" ] ; then
-        export JAVA_HOME=`/usr/libexec/java_home -v 9`
-        java -version
-    elif [ "$1" == "11" ] ; then
-        export JAVA_HOME=`/usr/libexec/java_home -v 11`
-        java -version
-    elif [ "$1" == "" ] ; then
+    if [ "$1" == "" ] ; then
         java -version
     else
-        echo UNSUPPORTED
+        v=$1
+        if [ "$v" == "8" ] ; then
+            v="1.8"
+        fi
+        export JAVA_HOME=`/usr/libexec/java_home -v $v`
+        java -version
     fi
 }
 
@@ -58,4 +43,13 @@ jv() {
     else
         jv_apple $@
     fi
+    JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
+    echo java ${JAVA_VERSION}
+    export JAVA_VERSION
+    if [ "$JAVA_VERSION" -ge 23 ]; then
+        export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG24}
+    else
+        export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
+    fi
+
 }
