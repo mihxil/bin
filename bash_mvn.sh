@@ -1,7 +1,8 @@
 
 # avoid warnings from java 24 when using maven
+MAVEN_OPTS_ALL="-Xms512m -Xmx6048m -Djava.awt.headless=true -Duser.language=da -ea  -Djava.net.preferIPv4Stack=true"
 MAVEN_OPTS_J24="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
-MAVEN_OPTS_ALL="-Xms512m -Xmx6048m -Djava.awt.headless=true -Duser.language=da -ea  -Djava.net.preferIPv4Stack=true $MAVEN_OPTS_J24"
+
 
 
 # -d64 -XX:-UseSuperWord
