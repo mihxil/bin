@@ -1,7 +1,7 @@
 
 # avoid warnings from java 24 when using maven
 MAVEN_OPTS_J24="--enable-native-access=ALL-UNNAMED --sun-misc-unsafe-memory-access=allow"
-MAVEN_OPTS_ALL="-Xms512m -Xmx6048m -Djava.awt.headless=true -Duser.language=da -ea  -Djava.net.preferIPv4Stack=true $MAVEN_OPTS_J24"
+MAVEN_OPTS_ALL="-Xms512m -Xmx6048m -Djava.awt.headless=true -Duser.language=da -ea  -Djava.net.preferIPv4Stack=true"
 
 
 # -d64 -XX:-UseSuperWord
@@ -9,6 +9,7 @@ MAVEN_OPTS_ALL="-Xms512m -Xmx6048m -Djava.awt.headless=true -Duser.language=da -
 #export MAVEN_OPTS_NODEBUG='-Xms512m -Xmx3048m -Djava.awt.headless=true -Duser.language=da -ea  -Dcatalina.base=/Users/tomcat/catalina/ -Djava.net.preferIPv4Stack=true'
 export MAVEN_OPTS_NODEBUG8=${MAVEN_OPTS_ALL}
 export MAVEN_OPTS_NODEBUG="--add-opens java.base/java.lang=ALL-UNNAMED $MAVEN_OPTS_ALL"
+export MAVEN_OPTS_NODEBUG24="$MAVEN_OPTS_NODEBUG  $MAVEN_OPTS_J24"
 #export MAVEN_OPTS_DEBUG="-d64 -XX:-UseSuperWord -Xms512m -Xmx3024m -XX:MaxPermSize=512m  -XX:NewSize=4m  -Djava.awt.headless=true -Xnoagent -Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=n  -Dcatalina.base=/Users/tomcat/"
 #export MAVEN_OPTS_DEBUG="-Xms512m -Xmx2048m -Djava.awt.headless=true -Xnoagent -Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=n  -Dcatalina.base=/Users/tomcat/"
 export MAVEN_OPTS_DEBUG="${MAVEN_OPTS_ALL} -Xrunjdwp:transport=dt_socket,address=4000,server=y,suspend=n -ea  -Dcom.sun.management.jmxremote --add-opens java.base/java.lang=ALL-UNNAMED "
@@ -19,6 +20,7 @@ export MAVEN_OPTS_DEBUG8="${MAVEN_OPTS_ALL} -Xdebug -Xnoagent -Djava.compiler=NO
 
 export MAVEN_OPTS_SOCKS="${MAVEN_OPTS_NODEBUG} -DsocksProxyHost=127.0.0.1 -DsocksProxyPort=10001"
 #export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
+
 
 export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
 
