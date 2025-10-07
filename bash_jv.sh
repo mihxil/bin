@@ -33,6 +33,7 @@ jv_ubuntu() {
         sudo update-java-alternatives --set $v
         java -version
     fi
+    export JAVA_HOME=`dirname $(dirname $(readlink -f $(which javac)))`
 }
 
 
