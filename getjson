@@ -1,2 +1,2 @@
 #!/bin/sh
-java -jar ~/github/mihxil/json/target/mihxil-json-0.2-SNAPSHOT-jar-with-dependencies.jar $@
+unzip -o ~/github/mihxil/json/mihxil-json/target/mihxil-json-*-all.zip

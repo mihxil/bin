@@ -1,1 +1,2 @@
-autossh -f -M 2001 -N -D 10001 -L 3389:145.58.171.117:389 developer@jump.vpro.nl
+autossh -M 2001 -f -N -D 10001 -L 3389:145.58.171.117:389 developer@jump.vpro.nl
+autossh -M 2002 -f -N -D 12346 -R 8071:localhost:8071 michiel@meeuw.org

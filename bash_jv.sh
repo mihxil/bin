@@ -3,6 +3,7 @@
 jv_apple() {
     if [ "$1" == "" ] ; then
         java -version
+        export JAVA_HOME=`/usr/libexec/java_home`
     else
         v=$1
         if [ "$v" == "8" ] ; then
@@ -11,6 +12,7 @@ jv_apple() {
         export JAVA_HOME=`/usr/libexec/java_home -v $v`
         java -version
     fi
+
 }
 
 
