@@ -50,9 +50,13 @@ jv() {
     echo java ${JAVA_VERSION}
     export JAVA_VERSION
     if [ "$JAVA_VERSION" -ge 24 ]; then
-        export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG24}
+      echo "java 24 maven"
+      export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG24}
+    elif [ "$JAVA_VERSION" -le 8 ]; then
+      echo "java 8 maven"
+      export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG8}
     else
-        export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
+      echo "default maven"
+      export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
     fi
-
 }
