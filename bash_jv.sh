@@ -46,10 +46,10 @@ jv() {
     else
         jv_apple $@
     fi
-    JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print $2}')
+    JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print ($2 == 1 ? $3 : $2)}')
     echo java ${JAVA_VERSION}
     export JAVA_VERSION
-    if [ "$JAVA_VERSION" -ge 23 ]; then
+    if [ "$JAVA_VERSION" -ge 24 ]; then
         export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG24}
     else
         export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
