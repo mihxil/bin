@@ -20,6 +20,8 @@ alias pp='python -mjson.tool'
 alias e='emacsclient -n'
 #alias e='open -a Emacs.app; open -a Emacs.app'
 
+# stupid windows explorer sometimes needs restart because dock gets messed up
+alias kill_explorer="taskkill.exe /F /IM explorer.exe ; explorer.exe & disown"
 
 alias h='history | tail -20'
 alias pcd='pushd .; cd'
@@ -43,3 +45,5 @@ export LC_ALL=
 export LC_CTYPE=en_US.UTF-8
 export LC_COLLATE=en_US.UTF-8
 export EDITOR=emacsclient
+
+
