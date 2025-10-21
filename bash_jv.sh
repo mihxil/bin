@@ -4,12 +4,14 @@ jv_apple() {
     if [ "$1" == "" ] ; then
         java -version
         export JAVA_HOME=`/usr/libexec/java_home`
+        export JRE_HOME=`/usr/libexec/java_home`
     else
         v=$1
         if [ "$v" == "8" ] ; then
             v="1.8"
         fi
         export JAVA_HOME=`/usr/libexec/java_home -v $v`
+        export JRE_HOME=`/usr/libexec/java_home -v $v`
         java -version
     fi
 
@@ -36,6 +38,9 @@ jv_ubuntu() {
         java -version
     fi
     export JAVA_HOME=`dirname $(dirname $(readlink -f $(which javac)))`
+    export JRE_HOME=`dirname $(dirname $(readlink -f $(which java)))`
+
+
 }
 
 
