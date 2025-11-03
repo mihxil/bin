@@ -27,6 +27,8 @@ alias h='history | tail -20'
 alias pcd='pushd .; cd'
 alias ncdu="ncdu --color off"
 
+alias k="kubectl"
+
 
 umask 002
 set bell-style visible
@@ -45,5 +47,3 @@ export LC_ALL=
 export LC_CTYPE=en_US.UTF-8
 export LC_COLLATE=en_US.UTF-8
 export EDITOR=emacsclient
-
-
