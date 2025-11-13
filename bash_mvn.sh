@@ -44,11 +44,11 @@ alias mvnd8='MAVEN_OPTS=${MAVEN_OPTS_DEBUG8}'
 alias mvn="mvn --threads 1C"
 alias mvnc="/usr/local/bin/mvn"
 function mvnt() {
-    LC_CTYPE=UTF-8 mvn -DskipTests=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" $1
+    LC_CTYPE=UTF-8 mvn -DskipTests=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" $@
     after_maven
 }
 function mvnT() {
-    LC_CTYPE=UTF-8 mvn -DskipTests=false -DskipITs=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" $1
+    LC_CTYPE=UTF-8 mvn -DskipTests=false -DskipITs=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" $@
     after_maven
 }
 alias mvn_clean_repo="mvn -Dmaven.repo.local=$HOME/.m2/repository_clean"
