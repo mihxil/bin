@@ -1,0 +1,12 @@
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+VISUALVM=/Applications/VisualVM.app/Contents
+#if [ ! -e $DIR/catalina-jmx-remote.jar ] ; then
+#    scp  vpro05ap@upload-testsites.omroep.nl:/local/tomcat/lib/catalina-jmx-remote.jar $DIR
+#fi
+echo This is possible too, this script is not needed any more then:
+echo cp $DIR/catalina-jmx-remote.jar $VISUALVM/platform/lib/
+
+
+
+$VISUALVM/MacOS/visualvm  --jdkhome `/usr/libexec/java_home -v 17`  -J-Djava.util.logging.config.file=$DIR/logging.properties -J-Djava.net.preferIPv4Stack=true -cp:a $DIR/catalina-jmx-remote.jar &
