@@ -48,7 +48,7 @@ function mvnt() {
     after_maven
 }
 function mvnT() {
-    LC_CTYPE=UTF-8 mvn -DskipTests=false -DskipITs=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" $@
+    LC_CTYPE=UTF-8 mvn -DskipTests=false -DskipITs=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" -D"skip.integration.test=false" $@
     after_maven
 }
 alias mvn_clean_repo="mvn -Dmaven.repo.local=$HOME/.m2/repository_clean"
