@@ -51,17 +51,16 @@ jv() {
     else
         jv_apple $@
     fi
-    JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print ($2 == 1 ? $3 : $2)}')
-    echo java ${JAVA_VERSION}
-    export JAVA_VERSION
+    export JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print ($2 == 1 ? $3 : $2)}')
+    JAVA_VERSION=${JAVA_VERSION%-ea}
     if [ "$JAVA_VERSION" -ge 24 ]; then
-      echo "java 24 maven"
+      echo "java $JAVA_VERSION  (maven for >=24)"
       export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG24}
     elif [ "$JAVA_VERSION" -le 8 ]; then
-      echo "java 8 maven"
+      echo "java $JAVA_VERSION  (maven for 8)"
       export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG8}
     else
-      echo "default maven"
+      echo "java $JAVA_VERSION default maven"
       export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
     fi
 }
