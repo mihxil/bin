@@ -44,3 +44,12 @@ oc_rsh() {
   oc rsh $pod
 
 }
+
+function oc_pod {
+   oc get pod --selector=app=$1 --no-headers -o custom-columns=name:.metadata.name
+}
+
+
+function  ocweb {
+    ocpod "web"
+}
