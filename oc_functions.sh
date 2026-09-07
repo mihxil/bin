@@ -52,5 +52,5 @@ oc_pod() {
 
 
 ocweb() {
-    ocpod "web"
+   oc_pod "web"
 }

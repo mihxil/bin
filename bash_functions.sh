@@ -1,5 +1,6 @@
 
 GDATE=/usr/bin/date
+
 if [ -z "$WSL_DISTRO_NAME" ] ; then
   #echo "apple?"
   GDATE=/opt/homebrew/bin/gdate
@@ -94,7 +95,7 @@ oc_ps1() {
         # Get current context
         CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
         if [ -n "$CONTEXT" ]; then
-            echo "(${CONTEXT##*-})"
+            echo "(${CONTEXT})"
         fi
     fi
 }
@@ -169,9 +170,9 @@ function ts() {
         if (( $input > 9999999999 )) ; then
             input=$((input / 1000))
         fi
-        date --date="@$input" -Iseconds
+        $GDATE --date="@$input" -Iseconds
     else
-        nanoseconds=$(date --date="$input" +%s%N)
+        nanoseconds=$($GDATE --date="$input" +%s%N)
         echo $((nanoseconds / 1000000))
     fi
 }
