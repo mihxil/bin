@@ -86,24 +86,6 @@ trim() {
 
 
 
-oc_ps1() {
-    local config=~/.kube/config
-    # collect both times in seconds-since-the-epoch
-    local one_day_ago
-    local file_time
-    one_day_ago=$($GDATE -d 'now - 1 days' +%s)
-    file_time=$($GDATE -r "$config" +%s)
-    if (( file_time > one_day_ago )) ; then
-        # Get current context
-        local CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
-
-        if [ -n "$CONTEXT" ]; then
-            NS=$(oc config get-contexts ${CONTEXT} --no-headers | awk '{print $5}')
-            echo "(${CONTEXT} $NS)"
-        fi
-    fi
-}
-
 git_branch() {
     _git_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [ -n "$_git_branch" ]; then
