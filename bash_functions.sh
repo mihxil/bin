@@ -6,7 +6,7 @@ if [ -z "$WSL_DISTRO_NAME" ] ; then
   GDATE=/opt/homebrew/bin/gdate
   # apple
   function cl {
-     cd $(dirname $(gfind $HOME/Library/Caches/JetBrains/*/tomcat/* -wholename '*/tomcat/*.log' -printf "%T@ %p\n" | sort -n | tail -1 | awk '{print $2}'))
+     cd $(dirname $(gfind $HOME/Library/Caches/JetBrains/*/tomcat/* /Users/tomcat/catalina -wholename '*/tomcat/*.log' -printf "%T@ %p\n" | sort -n | tail -1 | awk '{print $2}'))
   }
 else
   #echo "WSL $WSL_DISTRO_NAME"
@@ -87,15 +87,19 @@ trim() {
 
 
 oc_ps1() {
-    config=~/.kube/config
+    local config=~/.kube/config
     # collect both times in seconds-since-the-epoch
+    local one_day_ago
+    local file_time
     one_day_ago=$($GDATE -d 'now - 1 days' +%s)
     file_time=$($GDATE -r "$config" +%s)
     if (( file_time > one_day_ago )) ; then
         # Get current context
-        CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
+        local CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
+
         if [ -n "$CONTEXT" ]; then
-            echo "(${CONTEXT})"
+            NS=$(oc config get-contexts ${CONTEXT} --no-headers | awk '{print $5}')
+            echo "(${CONTEXT} $NS)"
         fi
     fi
 }
@@ -115,51 +119,64 @@ git_branch() {
 }
 
 git_log_for_date() {
-    start=$1
-    end=$2
+    local start=$1
+    local end=$2
+    local cwd
     if [ -z "$start" ] ; then
         start=$(date -I)
     fi
     if [ -z "$end" ] ; then
-        echo "no end"
         end=$(date -d "$day +1 days" -I)
+        echo "end: $end"
     fi
-    EMP='\033[23;90m'       # emphasis
-    NC='\033[0m' # No Color
-
+    local EMP='\033[23;90m'       # emphasis
+    local NC='\033[0m' # No Color
+    local cwd
+    cwd=$(pwd)
     #echo "git log --after=${start}T00:00:00 --before=${end}T00:00:00 --reverse"
-    for dir in `find . -name ".git" -type d`; do
+    for dir in $(find . -name ".git" -type d); do
+        local parent
         parent=$(dirname $dir)
-        tempfile=/tmp/$(basename $parent).$day.log
-        (cd $parent ; git log --after="${start}T00:00:00" --before="${end}T00:00:00" --reverse) > $tempfile
+        local tempfile
+        tempfile="/tmp/$(basename $parent).$day.log"
+
+        cd "$parent" || continue
+        git log --after="${start}T00:00:00" --before="${end}T00:00:00" --reverse | sed  -e "s#^#$parent:#" > $tempfile
         if (( $(cat $tempfile | wc -l) >  0 )) ; then
             echo -e "${EMP}$parent${NC}"
-	    cat $tempfile
+            cat $tempfile
         fi
-        rm $tempfile
+        cd $cwd || true
+        rm "$tempfile"
     done
 }
 
 git_log_npo_for_date() {
-    start=$1
-    end=$2
+    local start=$1
+    local end=$2
     if [ -z "$end" ] ; then
-        echo "no end"
         end=$(date -d "$start +1 days" -I)
     fi
-    dirs=("npo" "github/npo-poms" "github/vpro/vpro-shared")
+    echo "start: $start, end: $end"
+    local cwd
+    local dirs=("npo" "github/npo-poms" "github/vpro/vpro-shared")
     while [[ "$start" != "$end" ]]; do
+        local current_end
         current_end=$(date --date "$start + 1 day" -I)
         echo "$start - $current_end ${dirs[*]}"
-        for dir in ${dirs[@]}; do
-            echo $dir
-            (cd ~/$dir ; git_log_for_date $start $current_end )
-	done
+        cwd=$(pwd)
+        for dir in "${dirs[@]}"; do
+            cd ~/"$dir" || exit
+            #pwd
+            git_log_for_date "$start" "$current_end" | grep -v "^Author:"
+            cd $cwd || true
+        done
         start=$current_end
     done
 }
 
-function ts() {
+# used to be 'ts' but that collides with util from 'moreutils' package
+function timestamp() {
     input=$1
     re='^[0-9]+L?$'
     if [[ $input == "" ]] ; then

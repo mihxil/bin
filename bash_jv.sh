@@ -1,6 +1,7 @@
 
 
 jv_apple() {
+
     if [ "$1" == "" ] ; then
         java -version
         export JAVA_HOME=`/usr/libexec/java_home`
@@ -51,8 +52,8 @@ jv() {
     else
         jv_apple $@
     fi
-    export JAVA_VERSION=$(java -version 2>&1 | awk -F[\".] '/version/ {print ($2 == 1 ? $3 : $2)}')
-    JAVA_VERSION=${JAVA_VERSION%-ea}
+    export JAVA_VERSION=$(java -version 2>&1 | awk -F[\".-] '/version/ {print ($2 == 1 ? $3 : $2)}')
+    #JAVA_VERSION=${JAVA_VERSION%-ea}
     if [ "$JAVA_VERSION" -ge 24 ]; then
       echo "java $JAVA_VERSION  (maven for >=24)"
       export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG24}
