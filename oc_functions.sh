@@ -5,19 +5,25 @@ GDATE=${GDATE:-/usr/bin/date}
 #
 # Outputs nothing when ~/.kube/config is older than one day or has no current
 # context.
+
 oc_ps1() {
-    config=~/.kube/config
+    local config=~/.kube/config
     # collect both times in seconds-since-the-epoch
+    local one_day_ago
+    local file_time
     one_day_ago=$($GDATE -d 'now - 1 days' +%s)
     file_time=$($GDATE -r "$config" +%s)
     if (( file_time > one_day_ago )) ; then
         # Get current context
-        CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
+        local CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
+
         if [ -n "$CONTEXT" ]; then
-            echo "(${CONTEXT##*-})"
+            NS=$(oc config get-contexts ${CONTEXT} --no-headers | awk '{print $5}')
+            echo "(${CONTEXT} $NS)"
         fi
     fi
 }
+
 
 # Prints the name of the first pod whose name matches the optional regex.
 #
@@ -80,8 +86,11 @@ oc_rsh() {
 #
 # Arguments:
 #   $1 - Required value of the app label.
+#   $2 - Number of results to (maximally) return (default to 1)
 oc_pod() {
-   oc get pod --selector=app=$1 --no-headers -o custom-columns=name:.metadata.name
+    # app: b&g
+    # application: poms
+   oc get pod --selector=app=$1 --selector=application=$1 --sort-by=.metadata.creationTimestamp --no-headers -o custom-columns=name:.metadata.name | tail -${2:-1}
 }
 
 

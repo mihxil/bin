@@ -30,9 +30,9 @@ export MAVEN_OPTS=${MAVEN_OPTS_NODEBUG}
 #maven1:
 export MAVEN_HOME=${HOME}/Applications/maven-1.1
 
-export INPUT_DETERMINE_VERSION=false
+export INPUT_DETERMINE_VERSION=ifempty
 export INPUT_PUBLIC=false
-export JOB_ENV=NO
+#export JOB_ENV=NO
 
 #maven2
 alias mvn2='M2_HOME=/opt/local/share/java/maven2 mvn2'
@@ -47,6 +47,10 @@ function mvnt() {
     LC_CTYPE=UTF-8 mvn -DskipTests=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" $@
     after_maven
 }
+
+alias  mvntf='command mvn -T1 -DskipTests=false -DfailIfNoTests=false --fail-fast -D"maven.test.failure.ignore=false"'
+
+
 function mvnT() {
     LC_CTYPE=UTF-8 mvn -DskipTests=false -DskipITs=false -DfailIfNoTests=false -D"maven.test.failure.ignore=true" -D"skip.integration.test=false" $@
     after_maven
