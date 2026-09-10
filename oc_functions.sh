@@ -15,11 +15,15 @@ oc_ps1() {
     file_time=$($GDATE -r "$config" +%s)
     if (( file_time > one_day_ago )) ; then
         # Get current context
-        local CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: [^/]*' | cut -d' ' -f2)
-
+        local CONTEXT=$(cat $config 2>/dev/null| grep -o '^current-context: .*' | cut -d' ' -f2)
         if [ -n "$CONTEXT" ]; then
             NS=$(oc config get-contexts ${CONTEXT} --no-headers | awk '{print $5}')
-            echo "(${CONTEXT} $NS)"
+            # %%: takes substring before /
+            if [ "${CONTEXT%%/*}" == "$NS" ] ; then
+                echo "($NS)"
+            else
+                echo "(${CONTEXT%%/*} $NS)"
+            fi
         fi
     fi
 }
@@ -28,10 +32,16 @@ oc_ps1() {
 # Prints the name of the first pod whose name matches the optional regex.
 #
 # Arguments:
-#   $1 - Regular expression to match pod names; defaults to matching all pods.
+#   $1 - Regular expression to match pod names; defaults to matching all pods (except collectors)
 oc_get_first_pod() {
-  reg="${1:-.*}"
-  oc get pod --no-headers -o custom-columns=name:.metadata.name | grep -E "$reg" | head -1
+  reg="${1:-^(?!otel-collector).*}"
+  oc get pod --no-headers -o custom-columns=name:.metadata.name --sort-by=.metadata.creationTimestamp | grep -P "$reg" | head -1
+}
+
+#
+# Just opens rsh shell to the currently most likely pod
+oc_rsh_p1() {
+  oc rsh $(oc_get_first_pod)
 }
 
 # Prints the name of the first deployment whose name matches the optional regex.
@@ -96,5 +106,5 @@ oc_pod() {
 
 # Prints pod names for the web application.
 oc_web() {
-   oc_pod "web" | head -1
+   oc_pod "web" $1
 }
