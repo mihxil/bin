@@ -87,5 +87,5 @@ oc_pod() {
 
 # Prints pod names for the web application.
 oc_web() {
-   oc_pod "web"
+   oc_pod "web" | head -1
 }
