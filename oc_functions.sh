@@ -108,3 +108,95 @@ oc_pod() {
 oc_web() {
    oc_pod "web" $1
 }
+
+# Tails an access log in every pod owned by a StatefulSet.
+#
+# Arguments:
+#   $1 - Required StatefulSet name.
+#   $2 - Optional absolute path or file-name glob for access logs inside each
+#        container; defaults to /data/logs/*log. Wildcards apply only to the
+#        final path component.
+#   $3 - Optional container name, for pods with more than one container.
+#
+# Every output line is prefixed with its originating pod and written to stdout,
+# so it can be filtered, for example:
+#   oc_tail_access_logs orders | grep --line-buffered 'status=500'
+# Stop all tails with Ctrl-C.
+oc_tail_statefulset_access_logs() {
+  local statefulset=${1:-}
+  local log_file=${2:-/data/logs/*log}
+  local container=${3:-}
+  local log_directory
+  local log_pattern
+  local pod
+  local count=0
+  local -a pids=()
+  local -a container_option=()
+
+  if [ -z "$statefulset" ]; then
+    echo "Usage: oc_tail_statefulset_access_logs STATEFULSET [ACCESS_LOG_PATH_OR_GLOB] [CONTAINER]" >&2
+    return 2
+  fi
+
+  if [ -n "$container" ]; then
+    container_option=(--container "$container")
+  fi
+
+  log_directory=$(dirname "$log_file")
+  log_pattern=$(basename "$log_file")
+
+  while IFS= read -r pod; do
+    (
+      set -m
+      child_pid=
+      trap '
+        if [ -n "$child_pid" ]; then
+          kill -TERM -- "-$child_pid" 2>/dev/null
+          wait "$child_pid" 2>/dev/null
+        fi
+        exit 0
+      ' INT TERM
+
+      oc exec "$pod" "${container_option[@]}" -- sh -c \
+        'find "$1" -maxdepth 1 -type f -name "$2" -exec tail -n 0 -F {} +' \
+        sh "$log_directory" "$log_pattern" |
+        sed -u "s/^/[$pod] /" &
+      child_pid=$!
+      set +m
+      wait "$child_pid"
+    ) &
+    pids+=("$!")
+    count=$((count + 1))
+  done < <(
+    oc get pods -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{range .metadata.ownerReferences[*]}{.kind}={.name}{" "}{end}{"\n"}{end}' |
+      awk -v statefulset="$statefulset" '
+        {
+          for (i = 2; i <= NF; i++) {
+            if ($i == "StatefulSet=" statefulset) {
+              print $1
+              next
+            }
+          }
+        }'
+  )
+
+  if [ "$count" -eq 0 ]; then
+    echo "No pods found for StatefulSet '$statefulset'." >&2
+    return 1
+  fi
+
+  trap '
+    trap - INT TERM
+    for pid in "${pids[@]}"; do
+      kill -TERM "$pid" 2>/dev/null
+    done
+    for pid in "${pids[@]}"; do
+      wait "$pid" 2>/dev/null
+    done
+    return 130
+  ' INT TERM
+  wait "${pids[@]}"
+  trap - INT TERM
+}
+
+alias oc_tail_access_logs='oc_tail_statefulset_access_logs'
